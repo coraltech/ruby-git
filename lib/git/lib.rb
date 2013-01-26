@@ -529,17 +529,37 @@ module Git
     def remote_add(name, url, opts = {})
       arr_opts = ['add']
       arr_opts << '-f' if opts[:with_fetch]
-      arr_opts << '--'
       arr_opts << name
       arr_opts << url
       
       command('remote', arr_opts)
     end
-    
+
+    def remote_set_url(name, url, opts = {})
+      arr_opts = ['set-url']
+      
+      if opts[:add]
+        arr_opts << '--add' if opts[:add]
+      end
+      
+      if opts[:delete]
+        arr_opts << '--delete' if opts[:delete]
+      end
+      
+      if opts[:push]
+        arr_opts << '--push' if opts[:push]
+      end
+        
+      arr_opts << name
+      arr_opts << url
+      
+      command('remote', arr_opts)
+    end
+      
     # this is documented as such, but seems broken for some reason
     # i'll try to get around it some other way later
     def remote_remove(name)
-      command('remote', ['rm', '--', name])
+      command('remote', ['rm', name])
     end
     
     def remotes

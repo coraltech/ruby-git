@@ -11,8 +11,8 @@ module Git
       @fetch_opts = config['fetch']
     end
     
-    def remove
-      @base.remote_remove(@name)
+    def set_url(url, opts = {})
+      @base.lib.remote_set_url(@name, url, opts)  
     end
     
     def fetch
