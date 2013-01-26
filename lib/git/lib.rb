@@ -418,9 +418,9 @@ module Git
 
     def commit(message, opts = {})
       arr_opts = ['-m', message]
+      arr_opts << "--author=\'#{opts[:author]}\'" unless opts[:author] && opts[:author].empty?
       arr_opts << '-a' if opts[:add_all]
-      arr_opts << '--allow-empty' if opts[:allow_empty]
-      arr_opts << "--author" << opts[:author] if opts[:author]
+      arr_opts << '--allow-empty' if opts[:allow_empty]      
       command('commit', arr_opts)
     end
 
@@ -712,9 +712,12 @@ module Git
     end
 
     def escape(s)
-      escaped = s.to_s.gsub('\'', '\'\\\'\'')
-      %Q{"#{escaped}"}
+      escaped = s.to_s.gsub('"', '\'')
+      if escaped =~ /^\-+/
+        escaped  
+      else
+        %Q{"#{escaped}"}
+      end
     end
-
   end
 end
